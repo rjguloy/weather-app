@@ -11,16 +11,16 @@ class WeatherController extends Controller
         
         $ch = curl_init();
         $headers = [
-            'Authorization: d7b7aca4070932eb75aaf5166534e17c',
+            'Authorization: '.env('API_WEATHER', ''),
             'accept: application/json'
         ];  
         
-        curl_setopt($ch, CURLOPT_URL, "http://api.openweathermap.org/data/2.5/forecast?lat={$lat}&lon={$long}&units=metric&appid=d7b7aca4070932eb75aaf5166534e17c");
+        curl_setopt($ch, CURLOPT_URL, "http://api.openweathermap.org/data/2.5/forecast?lat={$lat}&lon={$long}&units=metric&appid=".env('API_WEATHER', ''));
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         $body = '{}';
 
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET"); 
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_POSTFIELDS,$body);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 

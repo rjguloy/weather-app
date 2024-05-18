@@ -215,9 +215,9 @@
             $(document).ready(function(){
 
                 function loadLocalMapSearchJs() {
-                    mapboxgl.accessToken = 'pk.eyJ1IjoicmpndWxveSIsImEiOiJjbHdhN3hicnAwYmU2MmtvZXY4ZGNiNTczIn0.nISGGR4ta_BY4vwPSS7JtA';
-                    const fsqAPIToken = 'fsq3ojQeNxEpItChqKEdwKxFMdT8gl1sHafG5cYryz/Z6BI=';
-                    const weatherToken = 'd7b7aca4070932eb75aaf5166534e17c';
+                    mapboxgl.accessToken = "{{ env('API_MAPBOX', '') }}";
+                    const fsqAPIToken = "{{ env('API_FOURSQUARE', '') }}";
+                    
                     let userLat = 40.7128;
                     let userLng = -74.0060;
                     let sessionToken = generateRandomSessionToken();
