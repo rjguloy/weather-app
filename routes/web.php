@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CityController;
+use App\Http\Controllers\WeatherController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,4 +17,4 @@ Route::get('/', function () {
     return view('start');
 });
 
-Route::get('/location', [CityController::class, 'CallFourSquareAPI']);
+Route::get('/weather/{lat}/{long}', [WeatherController::class, 'callWeather']);

@@ -2,26 +2,20 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Http\Request;
 use \Illuminate\Routing\ResponseFactory;
 
-class CityController extends Controller
+class WeatherController extends Controller
 {
-    //
-    public function getCountries() {
-        return response()->json("Getting countries");
-    }
-
-
-    public function CallFourSquareAPI() {
+    public function callWeather($lat, $long) {
         
         $ch = curl_init();
         $headers = [
-            'Authorization: fsq3ojQeNxEpItChqKEdwKxFMdT8gl1sHafG5cYryz/Z6BI=',
+            'Authorization: d7b7aca4070932eb75aaf5166534e17c',
             'accept: application/json'
-        ];
-        curl_setopt($ch, CURLOPT_URL, 'https://api.foursquare.com/v3/places/search');
+        ];  
+        
+        curl_setopt($ch, CURLOPT_URL, "http://api.openweathermap.org/data/2.5/forecast?lat={$lat}&lon={$long}&units=metric&appid=d7b7aca4070932eb75aaf5166534e17c");
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         $body = '{}';

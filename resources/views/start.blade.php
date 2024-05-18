@@ -13,6 +13,10 @@
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet" />
         <style>
+            body {
+            background-color: #CCCCCC;
+            }
+
             .explorer {
             position: relative;
             }
@@ -170,41 +174,50 @@
         </style>
     </head>
     <body>
-        <div><h1>Weather App</h1></div>
-        <div class="explorer">
-        <div id="map" class="explorer-map"></div>
-            <div class="explorer--text">
-                <input
-                type="text"
-                class="explorer--search explorer--background-icon explorer--text"
-                id="explorer-search"
-                placeholder="Search Foursquare Places"
-                />
-                <div id="explorer-dropdown">
-                <ul id="explorer-suggestions"></ul>
-                <div id="explorer-error" class="explorer--error explorer--background-icon">
-                    Something went wrong. Please refresh and try again.
+        <div class="container my-5"><h1 align="center" class="display-1">Weather App</h1></div>
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <div class="explorer">
+                    <div id="map" class="explorer-map"></div>
+                    <div class="explorer--text">
+                        <input
+                        type="text"
+                        class="explorer--search explorer--background-icon explorer--text"
+                        id="explorer-search"
+                        placeholder="Search Foursquare Places"
+                        />
+                        <div id="explorer-dropdown">
+                            <ul id="explorer-suggestions"></ul>
+                            <div id="explorer-error" class="explorer--error explorer--background-icon">
+                                Something went wrong. Please refresh and try again.
+                            </div>
+                            <div id="explorer-not-found" class="explorer--error explorer--background-icon"></div>
+                            <div class="explorer--copyright">
+                                <img src="https://files.readme.io/7835fdb-powerByFSQ.svg" alt="powered by foursquare" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="explorer-not-found" class="explorer--error explorer--background-icon"></div>
-                <div class="explorer--copyright">
-                    <img src="https://files.readme.io/7835fdb-powerByFSQ.svg" alt="powered by foursquare" />
-                </div>
-                </div>
+                <div id="weather-error"></div>
+                <div id="location-box">
+                <h2 id="location-title" class="display-4"></h2>
+                <p class="display-6">Sunrise: <span id="sunrise"></span> | Sunset: <span id="sunset"></span></p>
             </div>
+            <div id="weather-box"></div>
+            </div>
+            <div class="col-sm-2"></div>
         </div>
+        
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <script>
             $(document).ready(function(){
 
-                $.get('/location', function(data) {
-                    //console.log(data);
-                    $('#countries').text(data);
-                }, 'json');
-
                 function loadLocalMapSearchJs() {
                     mapboxgl.accessToken = 'pk.eyJ1IjoicmpndWxveSIsImEiOiJjbHdhN3hicnAwYmU2MmtvZXY4ZGNiNTczIn0.nISGGR4ta_BY4vwPSS7JtA';
                     const fsqAPIToken = 'fsq3ojQeNxEpItChqKEdwKxFMdT8gl1sHafG5cYryz/Z6BI=';
+                    const weatherToken = 'd7b7aca4070932eb75aaf5166534e17c';
                     let userLat = 40.7128;
                     let userLng = -74.0060;
                     let sessionToken = generateRandomSessionToken();
@@ -218,11 +231,13 @@
                     inputField.addEventListener('input', onChangeAutoComplete);
                     ulField.addEventListener('click', selectItem);
 
+
                     function success(pos) {
                         const { latitude, longitude } = pos.coords;
                         userLat = latitude;
                         userLng = longitude;
                         flyToLocation(userLat, userLng);
+                        
                     }
 
                     function logError(err) {
@@ -263,35 +278,35 @@
 
                     let isFetching = false;
                     async function changeAutoComplete({ target }) {
-                    const { value: inputSearch = '' } = target;
-                    ulField.innerHTML = '';
-                    notFoundField.style.display = 'none';
-                    errorField.style.display = 'none';
-                    if (inputSearch.length && !isFetching) {
-                        try {
-                            isFetching = true;
-                            const results = await autoComplete(inputSearch);
-                            if (results && results.length) {
-                                results.forEach((value) => {
-                                addItem(value);
-                                });
-                            } else {
-                                notFoundField.innerHTML = `Foursquare can't
-                                find ${inputSearch}. Make sure your search is spelled correctly.  
-                                <a href="https://foursquare.com/add-place?ll=${userLat}%2C${userLng}&venuename=${inputSearch}"
-                                target="_blank" rel="noopener noreferrer">Don't see the place you're looking for?</a>.`;
-                                notFoundField.style.display = 'block';
+                        const { value: inputSearch = '' } = target;
+                        ulField.innerHTML = '';
+                        notFoundField.style.display = 'none';
+                        errorField.style.display = 'none';
+                        if (inputSearch.length && !isFetching) {
+                            try {
+                                isFetching = true;
+                                const results = await autoComplete(inputSearch);
+                                if (results && results.length) {
+                                    results.forEach((value) => {
+                                    addItem(value);
+                                    });
+                                } else {
+                                    notFoundField.innerHTML = `Foursquare can't
+                                    find ${inputSearch}. Make sure your search is spelled correctly.  
+                                    <a href="https://foursquare.com/add-place?ll=${userLat}%2C${userLng}&venuename=${inputSearch}"
+                                    target="_blank" rel="noopener noreferrer">Don't see the place you're looking for?</a>.`;
+                                    notFoundField.style.display = 'block';
+                                }
+                            } catch (err) {
+                                errorField.style.display = 'block';
+                                logError(err);
+                            } finally {
+                                isFetching = false;
+                                dropDownField.style.display = 'block';
                             }
-                        } catch (err) {
-                            errorField.style.display = 'block';
-                            logError(err);
-                        } finally {
-                            isFetching = false;
-                            dropDownField.style.display = 'block';
+                        } else {
+                            dropDownField.style.display = 'none';
                         }
-                    } else {
-                        dropDownField.style.display = 'none';
-                    }
                     }
 
                     async function autoComplete(query) {
@@ -426,6 +441,76 @@
                         map.flyTo({
                             center: [lng, lat],
                         });
+                        $.get(`/weather/`+lat+`/`+lng, function(data){
+                            data = JSON.parse(data);
+                            showWeather(data);
+                        }, 'json');
+                    }
+
+                    function setDate(value) {
+                        const months = ["January", "February", "March", "April", "May", "June", 
+                        "July", "August", "September", "October", "November", "December"];
+                        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+                        const d = new Date(value);
+                        let day = days[d.getDay()];
+                        let date = d.getDate();
+                        let year = d.getFullYear();
+                        let month = months[d.getMonth()];
+                        let hour = d.getHours();
+                        let minutes = "0" + d.getMinutes();
+
+                        return (day + " " + month + " " + date + ", " + year + " " + hour + ":" + minutes.substr(-2));
+
+                    }
+
+                    function setTime(timestamp) {
+                        let date = new Date(timestamp * 1000);
+                        
+                        let hours = date.getHours();
+
+                        let minutes = "0" + date.getMinutes();
+
+                        // Will display time in 10:30:23 format
+                        let formattedTime = hours + ':' + minutes.substr(-2);
+
+                        console.log(formattedTime);
+                        return formattedTime;
+                    }
+                    function showWeather(data) {
+                        console.log(data);
+                        if (data.cod == 400 || data.cod == 404) {
+                            $('#weather-error').innerHTML = "No valid location.";
+                            return;
+                        }
+                        let location = data.city.name + ", " + data.city.country;
+                        let sunrise = setTime(data.city.sunrise);
+                        let sunset = setTime(data.city.sunset);
+                        $('#location-title').text(location);
+                        $('#sunrise').text(sunrise);
+                        $('#sunset').text(sunset);
+                        let text = `<table class="table table-striped table-dark">
+                        <tr>
+                            <th>Date Time</th>
+                            <th>Icon</th>
+                            <th>Weather</th>
+                            <th>Temp</th>
+                            <th>Max Temp</th>
+                            <th>Min Temp</th>
+                        </tr>`;
+                        //console.log(data.cod);
+                        data.list.forEach(function(list){
+                            text += `<tr>
+                                <td>${setDate(list.dt_txt)}</td>
+                                <td><img src="https://openweathermap.org/img/wn/${list.weather[0].icon}.png" /></td>
+                                <td>${list.weather[0].main} - ${list.weather[0].description}</td>
+                                <td>${list.main.temp}&deg;C</td>
+                                <td>${list.main.temp_max}&deg;C</td>
+                                <td>${list.main.temp_min}&deg;C</td>
+                            </tr>`;
+                        });
+                        text += "</table>";
+                        $('#weather-box').html(text);
                     }
 
                     function highlightedNameElement(textObject) {
