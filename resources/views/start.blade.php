@@ -4,177 +4,24 @@
     <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-
+        <link href="css/styles.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
-        rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet" />
         <style>
-            body {
-            background-color: #CCCCCC;
-            }
-
-            .explorer {
-            position: relative;
-            }
-
-            .explorer-map {
-            width: 100%;
-            height: 500px;
-            background-color: #F8F8F8;
-            }
-
-            .explorer--text {
-            font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica', 'Arial',
-                'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 24px;
-            color: #171417;
-            }
-
-            .explorer--secondary-text {
-            color: #959B9E;
-            font-size: 14px;
-            }
-
-            .explorer--bold {
-            font-weight: 500;
-            }
-
-            .explorer--background-icon {
-            background-size: 16px !important;
-            background-position-x: 16px !important;
-            background-position-y: 50% !important;
-            background-repeat: no-repeat !important;
-            }
-
-            @media only screen and (min-width: 640px) {
-            #explorer-search {
-                width: 400px !important;
-            }
-            }
-
-            #explorer-search {
-            box-sizing: border-box;
-            position: absolute;
-            top: 24px;
-            left: 24px;
-            padding: 8px 16px;
-            padding-left: 48px;
-            width: 85%;
-            height: 40px;
-            background-color: #FFFFFF;
-            border: 1px solid #E0DDDE;
-            border-radius: 4px;
-            background-image: url('https://files.readme.io/1bc7c8b-searchIcon.svg');
-            }
-
-            #explorer-search:hover,
-            #explorer-search:focus {
-            outline: none;
-            border-color: #3333FF;
-            }
-
-            #explorer-dropdown {
-            display: none;
-            position: absolute;
-            top: 68px;
-            left: 24px;
-            background-color: #FFFFFF;
-            border-radius: 4px;
-            border: 1px solid #F4F4F4;
-            width: 400px;
-            z-index: 1;
-            }
-
-            #explorer-suggestions {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            max-height: 300px;
-            overflow-y: scroll;
-            }
-
-            .explorer--dropdown-item:hover {
-            background-color: #F1F1F1;
-            }
-
-            .explorer--dropdown-item {
-            padding: 16px;
-            background: #FFFFFF;
-            box-shadow: inset 0px -1px 0px #F4F4F4;
-            }
-
-            .explorer--dropdown-item div {
-            pointer-events: none;
-            }
-
-            .explorer--copyright {
-            background: #FAF8F8;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            }
-
-            .explorer--error {
-            padding: 8px 16px;
-            padding-left: 48px;
-            background: #FCEDEC;
-            color: #980500;
-            border: 1px solid rgba(152, 5, 0, 0.3);
-            border-radius: 4px;
-            margin: 8px;
-            background-image: url('https://files.readme.io/62b6781-errorIcon.svg');
-            }
-
-            .mapboxgl-popup {
-            max-width: 290px !important;
-            }
-
-            .mapboxgl-popup-content {
-            padding: 0;
-            filter: drop-shadow(0 0 8px rgb(23 20 23 / 10%));
-            border-radius: 4px;
-            min-width: 290px;
-            min-height: 88px;
-            }
-
-            .explorer--popup {
-            display: flex;
-            flex-direction: row;
-            padding: 16px;
-            }
-
-            .explorer--popup-image {
-            width: 56px;
-            height: 56px;
-            margin: 0 !important;
-            }
-
-            .explorer--popup-description {
-            margin: 0 8px;
-            /* max-width: 160px; */
-            }
-
-            .explorer--popup-rating {
-            background: #389E45;
-            border-radius: 4px;
-            height: 24px;
-            min-width: 26px;
-            font-size: 12px;
-            color: #FFFFFF;
-            text-align: center;
-            margin-left: auto;
-            }
+            
         </style>
     </head>
     <body>
-        <div class="container my-5"><h1 align="center" class="display-1">Weather App</h1></div>
+        <div class="container my-5">
+            <header>
+                <h1 align="center" class="display-1">Weather App</h1>
+            </header>    
+        </div>
         <div class="row">
             <div class="col-sm-2"></div>
             <div class="col-sm-8">
@@ -207,6 +54,13 @@
             <div id="weather-box"></div>
             </div>
             <div class="col-sm-2"></div>
+            <footer style="text-align: center">
+                <p>
+                    Author: Robert John Guloy<br />
+                    <a href="mailto:robertjohnguloy@gmail.com">robertjohnguloy@gmail.com</a>
+                </p>
+                <p>Copyright &copy; 2024</p>
+            </footer>
         </div>
         
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
@@ -471,14 +325,12 @@
 
                         let minutes = "0" + date.getMinutes();
 
-                        // Will display time in 10:30:23 format
                         let formattedTime = hours + ':' + minutes.substr(-2);
 
-                        console.log(formattedTime);
                         return formattedTime;
                     }
                     function showWeather(data) {
-                        console.log(data);
+                        
                         if (data.cod == 400 || data.cod == 404) {
                             $('#weather-error').innerHTML = "No valid location.";
                             return;
@@ -489,7 +341,7 @@
                         $('#location-title').text(location);
                         $('#sunrise').text(sunrise);
                         $('#sunset').text(sunset);
-                        let text = `<table class="table table-striped table-dark">
+                        let elem = `<table class="table table-striped table-dark">
                         <tr>
                             <th>Date Time</th>
                             <th>Icon</th>
@@ -498,9 +350,9 @@
                             <th>Max Temp</th>
                             <th>Min Temp</th>
                         </tr>`;
-                        //console.log(data.cod);
+                        
                         data.list.forEach(function(list){
-                            text += `<tr>
+                            elem += `<tr>
                                 <td>${setDate(list.dt_txt)}</td>
                                 <td><img src="https://openweathermap.org/img/wn/${list.weather[0].icon}.png" /></td>
                                 <td>${list.weather[0].main} - ${list.weather[0].description}</td>
@@ -509,8 +361,8 @@
                                 <td>${list.main.temp_min}&deg;C</td>
                             </tr>`;
                         });
-                        text += "</table>";
-                        $('#weather-box').html(text);
+                        elem += "</table>";
+                        $('#weather-box').html(elem);
                     }
 
                     function highlightedNameElement(textObject) {
