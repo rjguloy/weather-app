@@ -12,9 +12,7 @@
 
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet" />
-        <style>
-            
-        </style>
+        <title>Weather App by Robert John Guloy</title>
     </head>
     <body>
         <div class="container my-5">
